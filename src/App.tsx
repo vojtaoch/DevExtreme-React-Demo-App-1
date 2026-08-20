@@ -9,6 +9,8 @@ import saveAs from 'file-saver';
 import { exportDataGrid } from 'devextreme/excel_exporter';
 import { jsPDF } from 'jspdf';
 import { exportDataGrid as exportDataGridToPdf} from 'devextreme/pdf_exporter';
+import { Button } from 'devextreme-react';
+import notify from 'devextreme/ui/notify';
  
 function App() {
     return (
@@ -45,6 +47,8 @@ function App() {
                   <Export enabled={true} formats={exportFormats} />
                   
             </DataGrid>
+
+            <Button onClick={() => {notify("Hello World!"); alert("Hello World!");}} text="Click me!" icon='message' />
         </div>
     );
 }

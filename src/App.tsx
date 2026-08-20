@@ -9,12 +9,16 @@ import saveAs from 'file-saver';
 import { exportDataGrid } from 'devextreme/excel_exporter';
 import { jsPDF } from 'jspdf';
 import { exportDataGrid as exportDataGridToPdf} from 'devextreme/pdf_exporter';
-import { Button } from 'devextreme-react';
+import { Button, ScrollView } from 'devextreme-react';
 import notify from 'devextreme/ui/notify';
+
+import NavigationDrawer from "./components/NavigationDrawer";
  
 function App() {
     return (
         <div className="App">
+            <NavigationDrawer />
+
             <DataGrid
                 dataSource={samples}
                 keyExpr="id"

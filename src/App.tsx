@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useCallback } from 'react';
 import 'devextreme/dist/css/dx.fluent.blue.light.css';
 
 import DataGrid, {
@@ -10,7 +10,9 @@ import DataGrid, {
     Item,
     SearchPanel,
     type DataGridTypes,
-    Export
+    Export,
+    EmptyItem,
+    Label
 } from 'devextreme-react/data-grid';
 
 import { Workbook } from 'devextreme-exceljs-fork';
@@ -21,9 +23,10 @@ import { exportDataGrid as exportDataGridToPdf} from 'devextreme/pdf_exporter';
 import Tabs, { Item as TabItem } from 'devextreme-react/tabs';
 import { Button } from 'devextreme-react/button';
 import notify from 'devextreme/ui/notify';
-import Form, { SimpleItem, GroupItem, RequiredRule } from 'devextreme-react/form';
+import Form, { SimpleItem, GroupItem, Tab, TabbedItem, ButtonItem } from 'devextreme-react/form';
 
 import ODataStore from "devextreme/data/odata/store";
+import { CheckBox } from 'devextreme-react';
 
 function InvoicesView() {
     const dataSource = useMemo(() => new ODataStore({
@@ -75,62 +78,106 @@ function InvoicesView() {
     );
 }
 
-const initialInvoiceData = {
-    FAK_ID: '',
-    FIRMA_ID: '',
-    ZAKAZKA_ID: '',
-    SMAN_ID: '',
-    DAT_ZAPL: '',
-    CELK_PRODEJ: 0,
-    CELK_DPH: 0,
-    CELK_ZAPL: 0
-};
-
 function FormView() {
-    const [formData, setFormData] = useState(initialInvoiceData);
+    const [isFormDisabled, setIsFormDisabled] = useState(true);
 
-    const handleSubmit = (e: any) => {
+    const onToggleDisableFormCheckBoxValueChanged = useCallback((e: { value?: boolean }) => {
+        setIsFormDisabled(!!e.value);
+    }, []);
+
+    const [formData, setFormData] = useState({
+        FAK_ID: '',
+        FIRMA_ID: '',
+        ZAKAZKA_ID: '',
+        SMAN_ID: '',
+        DAT_ZAPL: '',
+        CELK_PRODEJ: 0,
+        CELK_DPH: 0,
+        CELK_ZAPL: 0
+    });
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log("Odesílaná data faktury:", formData);
+
+        try {
+            const response = await fetch('/api/odata/FAKTURA', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Úspěšně odesláno:', data);
+                alert('W');
+            } else {
+                console.error('Chyba při odesílání:', response.statusText);
+                alert(await response.text);
+            }
+        } catch (error) {
+            console.error('Chyba sítě:', error);
+            alert('zamotaná síť');
+        }
     };
 
     return (
-        <div style={{ padding: '20px', maxWidth: '800px' }}>
-            <h2>Detail / Nová faktura</h2>
-            
-            <form onSubmit={handleSubmit}>
-                <Form formData={formData} colCount={2}>
-                    <GroupItem caption="Základní údaje">
-                        <SimpleItem dataField="FIRMA_ID">
-                            <RequiredRule message="Firma je povinná" />
-                        </SimpleItem>
-                        <SimpleItem dataField="ZAKAZKA_ID" />
-                        <SimpleItem dataField="SMAN_ID" editorType="dxTextBox" />
-                    </GroupItem>
+        <form action='/api/odata/FAKTURA'
+              onSubmit={handleSubmit}>
+            <Form formData={formData}
+                onFieldDataChanged={(e) => {
+                    setFormData((prev) => ({
+                        ...prev,
+                        [e.dataField!]: e.value
+                    }));
+                }}
+                colCount={2}
+                readOnly={isFormDisabled}>
+                <GroupItem caption='Sekce 1'>
+                    <SimpleItem dataField='FAK_ID' />
+                    <SimpleItem dataField='FIRMA_ID'>
+                        <Label alignment='right' />
+                    </SimpleItem>
+                    <SimpleItem dataField='ZAKAZKA_ID' />
+                    <EmptyItem />
+                    <EmptyItem />
+                    <EmptyItem />
+                    <EmptyItem />
+                    <EmptyItem />
+                    <SimpleItem dataField='SMAN_ID' />
+                </GroupItem>
+                <GroupItem caption='Sekce 2'>
+                    <TabbedItem>
+                        <Tab title='Sekce 2.1'
+                            colCount={2}>
+                            <SimpleItem dataField='DAT_ZAPL' />
+                            <SimpleItem dataField='CELK_PRODEJ' />
+                        </Tab>
+                        <Tab title='Sekce 2.2'>
+                            <SimpleItem dataField='CELK_DPH'
+                                        colSpan={2} />
+                            <SimpleItem dataField='CELK_ZAPL'
+                                    editorOptions={{disabled: true}} />
+                        </Tab>
+                    </TabbedItem>
+                </GroupItem>
 
-                    <GroupItem caption="Datace a Finance">
-                        <SimpleItem dataField="DAT_ZAPL" />
-                        <SimpleItem dataField="CELK_PRODEJ" editorType="dxNumberBox" />
-                        <SimpleItem dataField="CELK_DPH" editorType="dxNumberBox" />
-                        <SimpleItem dataField="CELK_ZAPL" editorType="dxNumberBox" />
-                    </GroupItem>
-                </Form>
+                <ButtonItem buttonOptions={{
+                    text: 'Submit',
+                    useSubmitBehavior: true
+                }} />
+            </Form>
 
-                <div style={{ marginTop: '20px', display: 'flex', gap: '10px' }}>
-                    <Button text="Uložit fakturu" type="success" useSubmitBehavior={true} />
-                    <Button text="Zrušit" type="normal" onClick={() => setFormData(initialInvoiceData)} />
-                </div>
-            </form>
-        </div>
+            <CheckBox text='Enable/disable form'
+                      value={isFormDisabled}
+                      onValueChanged={onToggleDisableFormCheckBoxValueChanged} />
+        </form>
     );
 }
 
 function App() {
     const [selectedIndex, setSelectedIndex] = useState(0);
-
-    const handleTabChange = (e: any) => {
-        setSelectedIndex(e.ariaIndex ? parseInt(e.ariaIndex) : e.itemIndex);
-    };
 
     return (
         <div className="App" style={{ padding: '10px' }}>

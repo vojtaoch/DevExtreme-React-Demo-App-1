@@ -1,4 +1,4 @@
-import { useMemo, useState, useCallback } from 'react';
+import { useMemo, useState, useCallback, type JSXElementConstructor, type ReactElement, type ReactNode, type ReactPortal } from 'react';
 import 'devextreme/dist/css/dx.fluent.blue.light.css';
 
 import DataGrid, {
@@ -6,15 +6,15 @@ import DataGrid, {
     Editing,
     FilterRow,
     Sorting,
-    Toolbar,
-    Item,
     SearchPanel,
     type DataGridTypes,
     Export,
     EmptyItem,
     Label,
     Summary,
-    TotalItem
+    TotalItem,
+    Toolbar as GridToolbar,
+    Item as GridItem
 } from 'devextreme-react/data-grid';
 
 import { Workbook } from 'devextreme-exceljs-fork';
@@ -28,9 +28,16 @@ import notify from 'devextreme/ui/notify';
 import Form, { SimpleItem, GroupItem, Tab, TabbedItem, ButtonItem } from 'devextreme-react/form';
 
 import ODataStore from "devextreme/data/odata/store";
-import { CheckBox } from 'devextreme-react';
+import { CheckBox, Drawer } from 'devextreme-react';
 import DataSource from 'devextreme/data/data_source';
+import { Toolbar, Item } from "devextreme-react/toolbar";
 
+import List from "devextreme-react/list";
+import { Link, Routes, Route } from "react-router-dom";
+import FormView from './components/views/FormView';
+import InvoicesView from './components/views/InvoicesView';
+
+/*
 function InvoicesView() {
     const dataSource = useMemo(() => new DataSource({
         store: new ODataStore({
@@ -56,11 +63,11 @@ function InvoicesView() {
                       allowDeleting={true}
                       allowAdding={true} />
 
-                  <Toolbar>
-                    <Item name="addRowButton" showText="always" />
-                    <Item name="searchPanel" />
-                    <Item name="exportButton" />
-                  </Toolbar>
+                  <GridToolbar>
+                    <GridItem name="addRowButton" showText="always" />
+                    <GridItem name="searchPanel" />
+                    <GridItem name="exportButton" />
+                  </GridToolbar>
 
                   <SearchPanel visible={true} />
 
@@ -105,10 +112,10 @@ function InvoiceGrid() {
                      allowDeleting={true}
                      allowAdding={true} />
 
-            <Toolbar>
-                <Item name="addRowButton"
-                      showText="always" />
-            </Toolbar>
+            <GridToolbar>
+                <GridItem name="addRowButton"
+                          showText="always" />
+            </GridToolbar>
 
 
             <Column dataField='id'
@@ -240,28 +247,105 @@ function FormView() {
         </form>
     );
 }
+    */
+
+
+const navigation = [
+    { id: 1, text: "Faktury", icon: "message", path: "components/views/InvoicesView" },
+    { id: 2, text: "Formulář", icon: "check", path: "components/views/FormView" }
+];
+
+function NavigationList(props: { stateHandler: (arg0: boolean) => void; }){
+    const closeDrawer = () => {
+        props.stateHandler(false);
+    }
+ 
+    const renderItem = useCallback((data: { path: string; icon: any; text: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; }) => {
+        return (
+            <div>
+                <Link to={'/' + data.path}>
+                    <div>
+                        <div className="dx-list-item-icon-container">
+                            <i className={`dx-icon dx-list-item-icon dx-icon-${data.icon}`}/>
+                        </div>
+                        <span>{data.text}</span>
+                    </div>
+                </Link>
+            </div>
+        );
+    }, []);
+ 
+    return (
+        <div>
+            <List
+                items={navigation}
+                width={200}
+                selectionMode="single"
+                onSelectionChanged={closeDrawer}
+                itemRender={renderItem}
+            />
+        </div>
+    );
+ 
+}
 
 function App() {
     const [selectedIndex, setSelectedIndex] = useState(0);
 
-    return (
-        <div className="App" style={{ padding: '10px' }}>
-            <Tabs 
-                selectedIndex={selectedIndex} 
-                onSelectedIndexChange={setSelectedIndex}
-                style={{ marginBottom: '20px' }}
-            >
-                <TabItem text="Faktury" icon="doc" />
-                <TabItem text="Formulář" icon="chart" />
-            </Tabs>
+    const [isOpened, setState] = useState(false);
+    const buttonOptions = useMemo(() => {
+        return {
+            icon: "menu",
+            onClick: () => {
+                setState(!isOpened);
+            }
+        };
+    }, [isOpened]);
 
-            {selectedIndex === 0 && <InvoicesView />}
-            {selectedIndex === 1 && <FormView />}
+    const renderList = useCallback(() => {
+        const stateHandler = (newState: boolean | ((prevState: boolean) => boolean)) => setState(newState);
+        return (
+            <NavigationList stateHandler={stateHandler} />
+        );
+    }, []);
+
+    const [invoicesDataSource] = useState(() => new DataSource({
+        store: new ODataStore({
+            url: "/api/odata/FAKTURA",
+            key: "FAK_ID",
+            version: 4
+        })
+    }));
+
+    return (
+        <div>
+            <Toolbar id="toolbar">
+                <Item 
+                    widget="dxButton" 
+                    options={buttonOptions} 
+                    location="before" />
+            </Toolbar>
+            <Drawer
+                opened={isOpened}
+                openedStateMode="shrink"
+                position="left"
+                minSize={37}
+                height={250}
+                render={renderList}
+            >
+                <Routes>
+                    <Route path='components/views/InvoicesView'
+                           element={<InvoicesView dataSource={invoicesDataSource} />} />
+                    <Route path='components/views/FormView'
+                           element={<FormView />} />
+                </Routes>
+            </Drawer>
         </div>
     );
 }
 
 
+/*
 const exportFormats = ['xlsx', 'pdf'];
  
 function exportGrid(e: DataGridTypes.ExportingEvent) {
@@ -286,6 +370,7 @@ function exportGrid(e: DataGridTypes.ExportingEvent) {
         });
     }
 }
+    */
 
 
 export default App;

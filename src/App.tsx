@@ -29,13 +29,15 @@ import Form, { SimpleItem, GroupItem, Tab, TabbedItem, ButtonItem } from 'devext
 
 import ODataStore from "devextreme/data/odata/store";
 import { CheckBox } from 'devextreme-react';
-import { Col } from 'devextreme-react/cjs/responsive-box';
+import DataSource from 'devextreme/data/data_source';
 
 function InvoicesView() {
-    const dataSource = useMemo(() => new ODataStore({
-        url: "/api/odata/FAKTURA",
-        key: "FAK_ID",
-        version: 4
+    const dataSource = useMemo(() => new DataSource({
+        store: new ODataStore({
+            url: "/api/odata/FAKTURA",
+            key: "FAK_ID",
+            version: 4
+        })
     }), []);
 
     return (
@@ -43,7 +45,7 @@ function InvoicesView() {
 
             <DataGrid
                 dataSource={dataSource}
-                keyExpr="FAK_ID"
+                remoteOperations={false}
                 onExporting={exportGrid}>
 
                   <Sorting mode="multiple" />

@@ -255,67 +255,49 @@ const navigation = [
     { id: 2, text: "Formulář", icon: "check", path: "components/views/FormView" }
 ];
 
-function NavigationList(props: { stateHandler: (arg0: boolean) => void; }){
-    const closeDrawer = () => {
-        props.stateHandler(false);
-    }
- 
-    const renderItem = useCallback((data: { path: string; icon: any; text: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; }) => {
-        return (
-            <div>
-                <Link to={'/' + data.path}>
-                    <div>
-                        <div className="dx-list-item-icon-container">
-                            <i className={`dx-icon dx-list-item-icon dx-icon-${data.icon}`}/>
-                        </div>
-                        <span>{data.text}</span>
-                    </div>
-                </Link>
-            </div>
-        );
-    }, []);
- 
+function NavigationList({ onClose }: { onClose: () => void }) {
     return (
         <div>
             <List
                 items={navigation}
                 width={200}
                 selectionMode="single"
-                onSelectionChanged={closeDrawer}
-                itemRender={renderItem}
+                onSelectionChanged={onClose}
+                itemRender={(data) => (
+                    <div>
+                        <Link to={'/' + data.path}>
+                            <div className="dx-list-item-icon-container">
+                                <i className={`dx-icon dx-list-item-icon dx-icon-${data.icon}`}/>
+                            </div>
+                            <span>{data.text}</span>
+                        </Link>
+                    </div>
+                )}
             />
         </div>
     );
- 
 }
 
 function App() {
-    const [selectedIndex, setSelectedIndex] = useState(0);
-
-    const [isOpened, setState] = useState(false);
-    const buttonOptions = useMemo(() => {
-        return {
-            icon: "menu",
-            onClick: () => {
-                setState(!isOpened);
-            }
-        };
-    }, [isOpened]);
-
-    const renderList = useCallback(() => {
-        const stateHandler = (newState: boolean | ((prevState: boolean) => boolean)) => setState(newState);
-        return (
-            <NavigationList stateHandler={stateHandler} />
-        );
+const [isOpened, setIsOpened] = useState(false);
+    
+    const toggleOpened = useCallback(() => {
+        setIsOpened(prev => !prev);
     }, []);
 
-    const [invoicesDataSource] = useState(() => new DataSource({
-        store: new ODataStore({
-            url: "/api/odata/FAKTURA",
-            key: "FAK_ID",
-            version: 4
-        })
-    }));
+    const closeDrawer = useCallback(() => {
+        setIsOpened(false);
+    }, []);
+
+    const buttonOptions = useMemo(() => ({
+        icon: "menu",
+        onClick: toggleOpened
+    }), [toggleOpened]);
+
+    // Čisté předání bez vnořených funkcí
+    const renderNavigation = useCallback(() => (
+        <NavigationList onClose={closeDrawer} />
+    ), [closeDrawer]);
 
     return (
         <div>
@@ -329,16 +311,14 @@ function App() {
                 opened={isOpened}
                 openedStateMode="shrink"
                 position="left"
-                minSize={37}
-                height={250}
-                render={renderList}
+                component={renderNavigation}
             >
-                <Routes>
-                    <Route path='components/views/InvoicesView'
-                           element={<InvoicesView dataSource={invoicesDataSource} />} />
-                    <Route path='components/views/FormView'
-                           element={<FormView />} />
-                </Routes>
+                <div id="content">
+                    <Routes>
+                        <Route path='components/views/InvoicesView' element={<InvoicesView />} />
+                        <Route path='components/views/FormView' element={<FormView />} />
+                    </Routes>
+                </div>
             </Drawer>
         </div>
     );

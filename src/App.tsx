@@ -12,7 +12,9 @@ import DataGrid, {
     type DataGridTypes,
     Export,
     EmptyItem,
-    Label
+    Label,
+    Summary,
+    TotalItem
 } from 'devextreme-react/data-grid';
 
 import { Workbook } from 'devextreme-exceljs-fork';
@@ -27,6 +29,7 @@ import Form, { SimpleItem, GroupItem, Tab, TabbedItem, ButtonItem } from 'devext
 
 import ODataStore from "devextreme/data/odata/store";
 import { CheckBox } from 'devextreme-react';
+import { Col } from 'devextreme-react/cjs/responsive-box';
 
 function InvoicesView() {
     const dataSource = useMemo(() => new ODataStore({
@@ -75,6 +78,64 @@ function InvoicesView() {
 
             <Button onClick={() => {notify("Hello World!"); alert("Hello World!");}} text="Click me!" icon='message' />
         </div>
+    );
+}
+
+function InvoiceGrid() {
+    const [dataSource, setDataSource] = useState([]);
+
+    const setAmountValue = (newData: any, value: number, currentRowData: any) => {
+        newData.amount = value;
+        const currentPrice = newData.unitPrice ?? currentRowData.unitPrice ?? 0;
+        newData.totalPrice = (value || 0) * currentPrice;
+    };
+
+    const setUnitPriceValue = (newData: any, value: number, currentRowData: any) => {
+        newData.unitPrice = value;
+        const currentQuantity = newData.amount ?? currentRowData.amount ?? 0;
+        newData.totalPrice = (value || 0) * currentQuantity;
+    };
+
+    return (
+        <DataGrid dataSource={dataSource}>
+            <Editing mode="popup"
+                     allowUpdating={true}
+                     allowDeleting={true}
+                     allowAdding={true} />
+
+            <Toolbar>
+                <Item name="addRowButton"
+                      showText="always" />
+            </Toolbar>
+
+
+            <Column dataField='id'
+                    caption='ID položky' />
+            <Column dataField='name'
+                    caption='Název' />
+            <Column dataField='amount'
+                    caption='Množství'
+                    dataType='number'
+                    alignment='left'
+                    setCellValue={setAmountValue} />
+            <Column dataField='unit'
+                    caption='Jednotka' />
+            <Column dataField='unitPrice'
+                    caption='Cena za jednotku (Kč)'
+                    dataType='number'
+                    alignment='left'
+                    setCellValue={setUnitPriceValue} />
+            <Column dataField='totalPrice'
+                    caption='Celková cena (Kč)'
+                    allowEditing={false}
+                    calculateCellValue={(rowData) => (rowData.amount || 0) * (rowData.unitPrice || 0)} />
+
+
+            <Summary>
+                <TotalItem column='totalPrice'
+                           summaryType='sum' />
+            </Summary>
+        </DataGrid>
     );
 }
 
@@ -162,6 +223,8 @@ function FormView() {
                         </Tab>
                     </TabbedItem>
                 </GroupItem>
+
+                <SimpleItem colSpan={2} render={() => <InvoiceGrid />} />
 
                 <ButtonItem buttonOptions={{
                     text: 'Submit',

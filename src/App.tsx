@@ -168,7 +168,7 @@ function App() {
         <NavigationList onClose={closeDrawer} />
     ), [closeDrawer]);
 
-    const [isPopupVisible, setIsPopupVisible] = useState(true);
+    const [isPopupVisible, setIsPopupVisible] = useState(false);
     const togglePopupVisibility = () => {
         setIsPopupVisible(!isPopupVisible);
     };

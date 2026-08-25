@@ -9,7 +9,8 @@ import DataGrid, {
     type DataGridTypes,
     Export,
     Toolbar,
-    Item
+    Item,
+    Lookup
 } from 'devextreme-react/data-grid';
 
 import { Workbook } from 'devextreme-exceljs-fork';
@@ -21,7 +22,9 @@ import { Button } from 'devextreme-react/button';
 import notify from 'devextreme/ui/notify';
 
 import DataSource from 'devextreme/data/data_source';
-import { ODataStore } from 'devextreme/common/data';
+import { CustomStore, ODataStore, type DataSourceOptions } from 'devextreme/common/data';
+import { useMemo } from 'react';
+
 
 function InvoicesView() {
     const dataSource = new DataSource({
@@ -31,6 +34,23 @@ function InvoicesView() {
             version: 4
         })
     });
+
+    const companyIDsSource: DataSourceOptions = useMemo(() => ({
+        store: new CustomStore({
+            key: 'FIRMA_ID',
+            loadMode: 'raw', // Zabezpečí klientské filtrování
+            load: async () => {
+                const res = await fetch('/api/ComboView/Kontakt_RowSource_01');
+                const json = await res.json();
+                
+                return json.Data.map((item: any) => ({
+                    FIRMA_ID: item.FIRMA_ID,
+                    NAZEV: item.FIRMA_ID?.trim()
+                }));
+            }
+        }),
+        paginate: false
+    }), []);
 
     return (
         <div className="App">
@@ -60,7 +80,12 @@ function InvoicesView() {
 
 
                   <Column dataField='FAK_ID' />
-                  <Column dataField='FIRMA_ID' />
+                  <Column dataField='FIRMA_ID'>
+                    <Lookup
+                        dataSource={companyIDsSource}
+                        valueExpr='FIRMA_ID'
+                        displayExpr='NAZEV' />
+                  </Column>
                   <Column dataField='ZAKAZKA_ID' />
                   <Column dataField='SMAN_ID' dataType='string' />
                   <Column dataField='DAT_ZAPL' />

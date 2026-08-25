@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import 'devextreme/dist/css/dx.fluent.blue.light.css';
 
 import DataGrid, {
@@ -25,13 +24,13 @@ import DataSource from 'devextreme/data/data_source';
 import { ODataStore } from 'devextreme/common/data';
 
 function InvoicesView() {
-    const dataSource = useMemo(() => new DataSource({
+    const dataSource = new DataSource({
         store: new ODataStore({
             url: "/api/odata/FAKTURA",
             key: "FAK_ID",
             version: 4
         })
-    }), []);
+    });
 
     return (
         <div className="App">

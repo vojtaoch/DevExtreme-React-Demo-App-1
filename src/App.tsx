@@ -1,4 +1,4 @@
-import { useMemo, useState, useCallback } from 'react';
+import { useMemo, useState, useCallback, useEffect } from 'react';
 import 'devextreme/dist/css/dx.fluent.blue.light.css';
 import { Drawer } from 'devextreme-react';
 import { Toolbar, Item } from "devextreme-react/toolbar";
@@ -77,6 +77,79 @@ function NavigationList({ onClose }: { onClose: () => void }) {
 
 function App() {
     const [isOpened, setIsOpened] = useState(false);
+
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    useEffect(() => {
+        const handleError = (message: string) => {
+            setErrorMessage(message);
+        };
+
+        const originalConsoleError = console.error;
+        console.error = (...args: any[]) => {
+            originalConsoleError.apply(console, args);
+            const formattedMessage = args
+                .map(arg => (typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)))
+                .join(' ');
+            handleError(formattedMessage);
+        };
+
+        const originalFetch = window.fetch;
+        window.fetch = async (...args) => {
+            try {
+                const response = await originalFetch(...args);
+                if (!response.ok) {
+                    // Pokud server vrátí status 400+, načteme text chyby
+                    const errorText = await response.clone().text().catch(() => '');
+                    const url = typeof args[0] === 'string' ? args[0] : (args[0] as Request).url;
+                    handleError(`HTTP Chyba ${response.status} (${response.statusText})\nURL: ${url}\n${errorText}`);
+                }
+                return response;
+            } catch (error: any) {
+                handleError(`Síťová chyba (Fetch failed): ${error.message || error}`);
+                throw error;
+            }
+        };
+
+        const originalXhrOpen = XMLHttpRequest.prototype.open;
+        const originalXhrSend = XMLHttpRequest.prototype.send;
+
+        XMLHttpRequest.prototype.open = function (method: string, url: string | URL, ...rest: any[]) {
+            (this as any)._url = url.toString();
+            (this as any)._method = method;
+            return originalXhrOpen.apply(this, [method, url, ...rest] as any);
+        };
+
+        XMLHttpRequest.prototype.send = function (...args: any[]) {
+            this.addEventListener('load', function () {
+                if (this.status >= 400) {
+                    const url = (this as any)._url || '';
+                    handleError(`HTTP Chyba ${this.status} (${this.statusText})\nURL: ${url}\n${this.responseText}`);
+                }
+            });
+            return originalXhrSend.apply(this, args);
+        };
+
+        const handleWindowError = (event: ErrorEvent) => {
+            handleError(event.message || 'Neznámá chyba aplikace');
+        };
+        const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
+            const reason = event.reason;
+            const message = reason instanceof Error ? reason.message : String(reason);
+            handleError(`Asynchronní chyba: ${message}`);
+        };
+
+        window.addEventListener('error', handleWindowError);
+        window.addEventListener('unhandledrejection', handleUnhandledRejection);
+
+        return () => {
+            console.error = originalConsoleError;
+            window.fetch = originalFetch;
+            XMLHttpRequest.prototype.open = originalXhrOpen;
+            XMLHttpRequest.prototype.send = originalXhrSend;
+            window.removeEventListener('error', handleWindowError);
+            window.removeEventListener('unhandledrejection', handleUnhandledRejection);
+        };
+    }, []);
     
     const toggleOpened = useCallback(() => {
         setIsOpened(prev => !prev);
@@ -134,6 +207,23 @@ function App() {
             <Button
                 text='Open popup'
                 onClick={togglePopupVisibility} />
+
+            <Popup
+                visible={Boolean(errorMessage)}
+                onHiding={() => setErrorMessage(null)}
+                hideOnOutsideClick={true}
+                showTitle={true}
+                title='Chyba v aplikaci'
+                width={450}
+                height="auto"
+                wrapperAttr={{ style: { baseZIndex: 999} }}
+            >
+                <div style={{ padding: '10px', color: '#d9534f' }}>
+                    <pre style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word', fontFamily: 'monospace' }}>
+                        {errorMessage}
+                    </pre>
+                </div>
+            </Popup>
         </div>
     );
 }

@@ -58,7 +58,10 @@ function InvoicesView() {
             <DataGrid
                 dataSource={dataSource}
                 remoteOperations={false}
-                onExporting={exportGrid}>
+                onExporting={exportGrid}
+                onRowInserted={(e: DataGridTypes.RowInsertedEvent) => {
+                    notify("Záznam byl úspěšně vytvořen!", "success", 5000);
+                }}>
 
                   <Sorting mode="multiple" />
                   <FilterRow visible={true} />

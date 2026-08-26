@@ -12,11 +12,13 @@ import {
 } from 'devextreme-react/popup';
 import logo from "./assets/images/JS_logo.jpg";
 import { Button } from 'devextreme-react/button';
+import X8CertificateRedesign from './components/views/X8CertificateRedesign/X8CertificateRedesignView';
 
 
 const navigation = [
     { id: 1, text: "Faktury", icon: "message", path: "components/views/InvoicesView" },
-    { id: 2, text: "Formulář", icon: "check", path: "components/views/FormView" }
+    { id: 2, text: "Formulář", icon: "check", path: "components/views/FormView" },
+    { id: 3, text: "X8 Redesign dokladu", icon: "money", path: "components/views/X8CertificateRedesign/X8CertificateRedesignView" }
 ];
 
 const renderContent = () =>  {
@@ -188,8 +190,18 @@ function App() {
                 component={renderNavigation}>
                 <div id="content">
                     <Routes>
-                        <Route path='components/views/InvoicesView' element={<InvoicesView />} />
-                        <Route path='components/views/FormView' element={<FormView />} />
+                        <Route
+                            path='components/views/InvoicesView'
+                            element={<InvoicesView />}
+                        />
+                        <Route
+                            path='components/views/FormView'
+                            element={<FormView />}
+                        />
+                        <Route
+                            path='components/views/X8CertificateRedesign/X8CertificateRedesignView'
+                            element={<X8CertificateRedesign />}
+                        />
                     </Routes>
                 </div>
             </Drawer>

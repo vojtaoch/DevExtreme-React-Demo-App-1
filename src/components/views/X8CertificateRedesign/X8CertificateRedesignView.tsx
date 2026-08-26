@@ -1,6 +1,7 @@
-import Form from 'devextreme-react/form';
+import Form, { EmptyItem } from 'devextreme-react/form';
 import TopLeft from './TopLeft';
 import TopMiddle from './TopMiddle';
+import BottomTabs from './BottomTabs';
 
 
 function X8CertificateRedesignView() {
@@ -11,6 +12,8 @@ function X8CertificateRedesignView() {
         >
             <TopLeft />
             <TopMiddle />
+            <EmptyItem />
+            <BottomTabs />
         </Form>
     );
 }

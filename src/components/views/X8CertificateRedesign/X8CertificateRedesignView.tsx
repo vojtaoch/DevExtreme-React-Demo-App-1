@@ -1,5 +1,6 @@
 import Form from 'devextreme-react/form';
 import TopLeft from './TopLeft';
+import TopMiddle from './TopMiddle';
 
 
 function X8CertificateRedesignView() {
@@ -9,6 +10,7 @@ function X8CertificateRedesignView() {
             showColonAfterLabel={false}
         >
             <TopLeft />
+            <TopMiddle />
         </Form>
     );
 }

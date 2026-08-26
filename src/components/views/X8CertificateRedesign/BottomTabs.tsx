@@ -1,8 +1,27 @@
 import { DataGrid, Lookup, Column } from 'devextreme-react/data-grid';
 import { GroupItem, Tab, TabbedItem } from 'devextreme-react/form';
+import DataSource from 'devextreme/data/data_source';
+import CustomStore from 'devextreme/data/custom_store';
 
 
 function BottomTabs() {
+    const polozkyDataSource = new DataSource({
+        store: new CustomStore({
+            key: 'POZICE',
+            load: async () => {
+                const response = await fetch("/api/odata/FAKTURA('FV06-0137')?$expand=FAK_POL");
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP chyba ${response.status}`);
+                }
+
+                const data = await response.json();
+                return data.FAK_POL || [];
+            }
+        }),
+        paginate: false
+    });
+
     return (
         <GroupItem
             colSpan={3}
@@ -12,7 +31,9 @@ function BottomTabs() {
                 <Tab
                     title='Položky'
                 >
-                    <DataGrid>
+                    <DataGrid
+                        dataSource={polozkyDataSource}
+                    >
 
                         <Column
                             dataField='POZICE'

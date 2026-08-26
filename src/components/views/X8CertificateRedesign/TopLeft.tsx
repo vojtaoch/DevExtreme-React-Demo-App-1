@@ -78,6 +78,8 @@ function CompanySection({ companyInfo, employeeInfo, isRecipient }: CompanySecti
 
 function TopLeft() {
     const smallInputFieldWidth = '75px';
+    const leftColumnInputFieldWidth = '200px';
+    const rightColumnInputFieldWidth = '170px';
 
     const customerCompanyInfo = {
         address: 'adresa...',

@@ -1,7 +1,52 @@
 import { SimpleItem, GroupItem, EmptyItem, Label } from 'devextreme-react/form';
 import { Button } from 'devextreme-react/button';
-import { TextBox } from 'devextreme-react/text-box';
 
+
+type ColumnElementProps = {
+    text: string,
+    readOnly?: boolean
+};
+
+const leftColumnInputFieldWidth = '205px';
+const rightColumnInputFieldWidth = '150px';
+
+function LeftColumnElement({text, readOnly} : ColumnElementProps) {
+    return (
+        <SimpleItem
+            dataField=''
+            editorOptions={{
+                width: leftColumnInputFieldWidth,
+                readOnly: readOnly,
+                elementAttr: { style: 'margin-top: -7px;' }
+            }}
+        >
+            <Label text={text} />
+        </SimpleItem>
+    );
+}
+
+function RightColumnElement({text, readOnly = false} : ColumnElementProps) {
+    return (
+        <SimpleItem
+            dataField=''
+            editorOptions={{
+                width: rightColumnInputFieldWidth,
+                readOnly: readOnly,
+                elementAttr: { 
+                    style: 'margin-top: -7px; margin-left: -80px;'
+                }
+            }}
+        >
+            <Label
+                render={() => (
+                    <span style={{ position: 'relative', left: '-80px' }}>
+                        {text}
+                    </span>
+                )}
+            />
+        </SimpleItem>
+    );
+}
 
 function TopMiddle() {
     const smallInputFieldWidth = '75px';
@@ -94,6 +139,40 @@ function TopMiddle() {
                 />
 
             </GroupItem>
+            <EmptyItem />
+
+
+            <LeftColumnElement text='Základ' />
+            <RightColumnElement text='Vystaveno' />
+
+            <LeftColumnElement text='DPH' />
+            <RightColumnElement text='Datum plnění' />
+
+            <LeftColumnElement text='Uhrazeno zálohou' />
+            <RightColumnElement
+                text='Přijato'
+                readOnly={true}
+            />
+
+            <LeftColumnElement text='Zaokrouhlení' />
+            <EmptyItem />
+
+            <LeftColumnElement text='K úhradě' />
+            <GroupItem
+                colCount={2}
+            >
+                <RightColumnElement text='Splatnost' />
+                <SimpleItem
+                    render={() => (
+                        <Button
+                            elementAttr={{ style: 'margin-top: 17px; margin-left: -75px; width: 40px' }}
+                        />
+                    )}
+                />
+            </GroupItem>
+
+            <LeftColumnElement text='Uhrazeno' />
+            <RightColumnElement text='Zaplaceno' />
 
         </GroupItem>
     );

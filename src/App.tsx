@@ -243,3 +243,5 @@ function App() {
 export default App;
 
 // $data = Invoke-RestMethod -Uri "http://192.168.44.17:8080/api/odata/FAKTURA" -Method Get
+// $fak = Invoke-RestMethod ` -Uri "http://192.168.44.17:8080/api/odata/FAKTURA('FV06-0137')?`$expand=FAK_POL" ` -Method Get
+

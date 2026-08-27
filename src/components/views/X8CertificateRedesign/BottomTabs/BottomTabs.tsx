@@ -4,6 +4,8 @@ import { CheckBox } from 'devextreme-react';
 
 import Polozky from './Polozky';
 import Zatrideni from './Zatrideni';
+import PomocneTexty from './PomocneTexty';
+import Poznamka from './Poznamka';
 
 function BottomTabs() {
     return (
@@ -14,12 +16,7 @@ function BottomTabs() {
 
                 <Polozky />
                 <Zatrideni />
-
-                <Tab
-                    title='Pomocné texty'
-                >
-                    
-                </Tab>
+                <PomocneTexty />
 
                 <Tab
                     title='Dynamické texty'
@@ -27,11 +24,7 @@ function BottomTabs() {
                     
                 </Tab>
 
-                <Tab
-                    title='Poznámka'
-                >
-                    
-                </Tab>
+                <Poznamka />
 
                 <Tab
                     title='Urgence / Storno'

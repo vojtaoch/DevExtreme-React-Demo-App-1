@@ -1,11 +1,11 @@
-import { SimpleItem, Label } from 'devextreme-react/data-grid';
-import { ButtonItem, GroupItem, Tab, TabbedItem } from 'devextreme-react/form';
-import { CheckBox } from 'devextreme-react';
+import { GroupItem, Tab, TabbedItem } from 'devextreme-react/form';
 
 import Polozky from './Polozky';
 import Zatrideni from './Zatrideni';
 import PomocneTexty from './PomocneTexty';
+import DynamickeTexty from './DynamickeTexty';
 import Poznamka from './Poznamka';
+
 
 function BottomTabs() {
     return (
@@ -17,12 +17,11 @@ function BottomTabs() {
                 <Polozky />
                 <Zatrideni />
                 <PomocneTexty />
-
+                
                 <Tab
                     title='Dynamické texty'
-                >
-                    
-                </Tab>
+                    render={() => (<DynamickeTexty />)}
+                />
 
                 <Poznamka />
 

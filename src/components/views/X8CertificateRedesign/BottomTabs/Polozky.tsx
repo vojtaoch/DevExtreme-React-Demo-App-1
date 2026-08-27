@@ -1,5 +1,4 @@
 import { DataGrid, Lookup, Column } from 'devextreme-react/data-grid';
-import { Tab } from 'devextreme-react/form';
 import DataSource from 'devextreme/data/data_source';
 import CustomStore from 'devextreme/data/custom_store';
 
@@ -23,148 +22,144 @@ function Polozky() {
     });
 
     return (
-        <Tab
-            title='Položky'
+        <DataGrid
+            dataSource={polozkyDataSource}
         >
-            <DataGrid
-                dataSource={polozkyDataSource}
+
+            <Column
+                dataField='POZICE'
+                caption='POZ'
+            />
+
+            <Column
+                dataField='cisloZbozi'  // ?
+                caption='ČÍSLO ZBOŽÍ'
             >
+                <Lookup />
+            </Column>
 
-                <Column
-                    dataField='POZICE'
-                    caption='POZ'
-                />
+            <Column
+                dataField='NAZEV_FAK_POL'
+                caption='NÁZEV ZBOŽÍ'
+            >
+                <Lookup />
+            </Column>
 
-                <Column
-                    dataField='cisloZbozi'  // ?
-                    caption='ČÍSLO ZBOŽÍ'
-                >
-                    <Lookup />
-                </Column>
+            <Column
+                dataField='MNOZSTVI'
+                dataType='number'
+                headerCellRender={(_) => (
+                    <div
+                        style={{
+                            position: 'absolute',
+                            left: '50%',
+                            top: '50%',
+                            transform: 'translate(-670%, -50%)',
+                            zIndex: 10,
+                            overflow: 'visible',
+                            pointerEvents: 'none'
+                        }}
+                    > {/* the value of transform needs to be updated if new columns are to be added */}
+                        MNOŽSTVÍ
+                    </div>
+                )}
+            />
 
-                <Column
-                    dataField='NAZEV_FAK_POL'
-                    caption='NÁZEV ZBOŽÍ'
-                >
-                    <Lookup />
-                </Column>
+            <Column
+                dataField='MJ'
+                caption=''
+            >
+                <Lookup />
+            </Column>
 
-                <Column
-                    dataField='MNOZSTVI'
-                    dataType='number'
-                    headerCellRender={(_) => (
-                        <div
-                            style={{
-                                position: 'absolute',
-                                left: '50%',
-                                top: '50%',
-                                transform: 'translate(-670%, -50%)',
-                                zIndex: 10,
-                                overflow: 'visible',
-                                pointerEvents: 'none'
-                            }}
-                        > {/* the value of transform needs to be updated if new columns are to be added */}
-                            MNOŽSTVÍ
-                        </div>
-                    )}
-                />
+            <Column
+                dataField='CENA_PRODEJ'
+                dataType='number'
+                format='CZK'
+                caption='CENA'
+            />
 
-                <Column
-                    dataField='MJ'
-                    caption=''
-                >
-                    <Lookup />
-                </Column>
+            <Column
+                dataField='DPH'
+                dataType='number'
+                format='percent'
+                caption='DPH'
+            />
 
-                <Column
-                    dataField='CENA_PRODEJ'
-                    dataType='number'
-                    format='CZK'
-                    caption='CENA'
-                />
+            {/* I am not sure what this column is for
+            <Column
+                dataField='celkem1'
+                caption='CELKEM'
+            />
+            */}
 
-                <Column
-                    dataField='DPH'
-                    dataType='number'
-                    format='percent'
-                    caption='DPH'
-                />
+            <Column
+                dataField='PDP'
+                dataType='number'
+                format='percent'
+                caption='PDP'
+            />
 
-                {/* I am not sure what this column is for
-                <Column
-                    dataField='celkem1'
-                    caption='CELKEM'
-                />
-                */}
+            <Column
+                dataField='TXTA_ID1'
+                caption='1. TEXT. ATR.'
+            >
+                <Lookup />
+            </Column>
 
-                <Column
-                    dataField='PDP'
-                    dataType='number'
-                    format='percent'
-                    caption='PDP'
-                />
+            <Column
+                dataField='TXTA_ID2'
+                caption='2. TEXT. ATR.'
+            >
+                <Lookup />
+            </Column>
 
-                <Column
-                    dataField='TXTA_ID1'
-                    caption='1. TEXT. ATR.'
-                >
-                    <Lookup />
-                </Column>
+            <Column
+                dataField='OBJ_ID'
+                caption='OBJEDNÁVKA'
+            >
+                <Lookup />
+            </Column>
 
-                <Column
-                    dataField='TXTA_ID2'
-                    caption='2. TEXT. ATR.'
-                >
-                    <Lookup />
-                </Column>
+            <Column
+                dataField='OBLAST_IPOL'
+                caption='OBLAST'
+            >
+                <Lookup />
+            </Column>
 
-                <Column
-                    dataField='OBJ_ID'
-                    caption='OBJEDNÁVKA'
-                >
-                    <Lookup />
-                </Column>
+            <Column
+                dataField='DOPRAVA_ID'
+                caption='DOPRAVA'
+            />
 
-                <Column
-                    dataField='OBLAST_IPOL'
-                    caption='OBLAST'
-                >
-                    <Lookup />
-                </Column>
+            <Column
+                dataField='CENA_SDPH'
+                dataType='number'
+                format='CZK'
+                caption='CENA S DPH'
+            />
 
-                <Column
-                    dataField='DOPRAVA_ID'
-                    caption='DOPRAVA'
-                />
+            {/* not sure what these are either
+            <Column
+                dataField='cenaZahr'
+                caption='CENA ZAHR.'
+            />
 
-                <Column
-                    dataField='CENA_SDPH'
-                    dataType='number'
-                    format='CZK'
-                    caption='CENA S DPH'
-                />
+            <Column
+                dataField='mn-2'
+                caption='MN -2'
+            />
+            */}
 
-                {/* not sure what these are either
-                <Column
-                    dataField='cenaZahr'
-                    caption='CENA ZAHR.'
-                />
+            <Column
+                dataField='CENA_NAKUP'
+                dataType='number'
+                format='CZK'
+                caption='CELKEM'
+            />
 
-                <Column
-                    dataField='mn-2'
-                    caption='MN -2'
-                />
-                */}
-
-                <Column
-                    dataField='CENA_NAKUP'
-                    dataType='number'
-                    format='CZK'
-                    caption='CELKEM'
-                />
-
-            </DataGrid>
-        </Tab>
+        </DataGrid>
     );
 }
 

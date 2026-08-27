@@ -7,78 +7,74 @@ const sampleData = [
 
 function DynamickeTexty() {
     return (
+        <DataGrid
+            dataSource={sampleData}
+            keyExpr='id'
+        >
 
+            <Editing
+                mode='cell'
+                allowAdding={true}
+                allowUpdating={true}
+                allowDeleting={true}
+            />
 
-            <DataGrid
-                dataSource={sampleData}
-                keyExpr='id'
+            <Column
+                dataField='a'
+                dataType='boolean'
+                caption='Ú'
+                editorOptions={{
+                    enableThreeStateBehavior: true
+                }}
+            />
+
+            <Column
+                dataField='b'
+                caption='Poz.'
+            />
+
+            <Column
+                dataField='c'
+                caption='Vzor'
             >
+                <Lookup />
+            </Column>
 
-                <Editing
-                    mode='cell'
-                    allowAdding={true}
-                    allowUpdating={true}
-                    allowDeleting={true}
-                />
+            <Column
+                dataField='d'
+                caption='Nadpis'
+            />
 
-                <Column
-                    dataField='a'
-                    dataType='boolean'
-                    caption='Ú'
-                    editorOptions={{
-                        enableThreeStateBehavior: true
-                    }}
-                />
+            <Column
+                dataField='e'
+                dataType='boolean'
+                caption='B'
+                editorOptions={{
+                    enableThreeStateBehavior: true
+                }}
+            />
 
-                <Column
-                    dataField='b'
-                    caption='Poz.'
-                />
+            <Column
+                dataField='f'
+                dataType='boolean'
+                caption='__'
+            />
 
-                <Column
-                    dataField='c'
-                    caption='Vzor'
-                >
-                    <Lookup />
-                </Column>
+            <Column
+                dataField='g'
+                caption='Dynamický text'
+            />
 
-                <Column
-                    dataField='d'
-                    caption='Nadpis'
-                />
+            <Column
+                dataField='h'
+                dataType='boolean'
+                caption='B'
+                editorOptions={{
+                    enableThreeStateBehavior: true
+                }}
+            />
 
-                <Column
-                    dataField='e'
-                    dataType='boolean'
-                    caption='B'
-                    editorOptions={{
-                        enableThreeStateBehavior: true
-                    }}
-                />
-
-                <Column
-                    dataField='f'
-                    dataType='boolean'
-                    caption='__'
-                />
-
-                <Column
-                    dataField='g'
-                    caption='Dynamický text'
-                />
-
-                <Column
-                    dataField='h'
-                    dataType='boolean'
-                    caption='B'
-                    editorOptions={{
-                        enableThreeStateBehavior: true
-                    }}
-                />
-
-            </DataGrid>
-
-
+        </DataGrid>
     );
 }
 

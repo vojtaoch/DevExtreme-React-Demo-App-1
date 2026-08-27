@@ -1,11 +1,21 @@
-import { GroupItem, Tab, TabbedItem } from 'devextreme-react/form';
+import { GroupItem, Tab, TabbedItem, SimpleItem, Label, ButtonItem } from 'devextreme-react/form';
+import { CheckBox } from 'devextreme-react';
 
 import Polozky from './Polozky';
-import Zatrideni from './Zatrideni';
 import PomocneTexty from './PomocneTexty';
 import DynamickeTexty from './DynamickeTexty';
 import Poznamka from './Poznamka';
 
+
+function ZatrideniItem({ text }: {text: string}) {
+    return (
+        <SimpleItem
+            dataField=''
+        >
+            <Label text={text} />
+        </SimpleItem>
+    );
+}
 
 function BottomTabs() {
     return (
@@ -14,16 +24,55 @@ function BottomTabs() {
         >
             <TabbedItem>
 
-                <Polozky />
-                <Zatrideni />
-                <PomocneTexty />
+                <Tab
+                    title='Položky'
+                    render={() => (<Polozky />)}
+                />
+
+                <Tab
+                    title='Zatřídění'
+                    colCount={4}
+                >
+                    <GroupItem>
+                        <ZatrideniItem text='Zakázka' />
+                        <ZatrideniItem text='Fáze' />
+                        <ZatrideniItem text='Oblast' />
+                        <ZatrideniItem text='Marketingová akce' />
+                        <ZatrideniItem text='Zdroj' />
+                    </GroupItem>
+
+                    <ButtonItem />
+
+                    <GroupItem>
+                        <CheckBox 
+                            text='Konsignace'
+                        />
+                    </GroupItem>
+
+                    <GroupItem>
+                        <ZatrideniItem text='Bankovní účet' />
+                        <ZatrideniItem text='Způsob úhrady' />
+                        <ZatrideniItem text='Způsob dodání' />
+                        <ZatrideniItem text='Dodací podmínky' />
+                        <ZatrideniItem text='Skladník' />
+                    </GroupItem>
+                </Tab>
+
+                <Tab
+                    title='Pomocné texty'
+                    render={() => (<PomocneTexty />)}
+                    colCount={1}
+                />
                 
                 <Tab
                     title='Dynamické texty'
                     render={() => (<DynamickeTexty />)}
                 />
 
-                <Poznamka />
+                <Tab
+                    title='Poznámka'
+                    render={() => (<Poznamka />)}
+                />
 
                 <Tab
                     title='Urgence / Storno'

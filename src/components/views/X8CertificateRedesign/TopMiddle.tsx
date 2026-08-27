@@ -1,5 +1,8 @@
 import { SimpleItem, GroupItem, EmptyItem, Label } from 'devextreme-react/form';
 import { Button } from 'devextreme-react/button';
+import TextBox from 'devextreme-react/cjs/text-box';
+
+import './TopMiddle.css';
 
 
 type ColumnElementProps = {
@@ -60,33 +63,29 @@ function TopMiddle() {
                 colCount={3}
             >
                 <SimpleItem
-                    dataField=''
-                    editorOptions={{ width: smallInputFieldWidth }}
-                >
-                    <Label text='Měna' />
-                </SimpleItem>
-                <SimpleItem
+                    colSpan={2}
                     render={() => (
-                        <Button
-                            elementAttr={{ style: 'margin-top: 24px; margin-left: -32px;' }}
-                        />  
+                        <div className="textbox-button-container">
+                            <TextBox
+                                width={smallInputFieldWidth}
+                            />
+                            <Button />
+                        </div>
                     )}
                 >
-                    <Label text='' />
+                    <Label text="Měna" />
                 </SimpleItem>
                 <SimpleItem
                     dataField=''
+                    cssClass='stav-zaplacena-zauctovana'
                     editorOptions={{
                         value: 'zaplacená / zaúčtovaná',
                         readOnly: true,
-                        elementAttr: {
-                            style: 'border: none; background: transparent; width: 170px; margin-left: -80px;'
-                        }
                     }}
                 >
                     <Label
                         render={() => (
-                            <span style={{ position: 'relative', left: '-80px' }}>
+                            <span className='stav-zaplacena-zauctovana'>
                                 Stav
                             </span>
                         )}

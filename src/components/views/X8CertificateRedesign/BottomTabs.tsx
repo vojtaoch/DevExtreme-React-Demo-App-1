@@ -1,7 +1,19 @@
-import { DataGrid, Lookup, Column } from 'devextreme-react/data-grid';
-import { GroupItem, Tab, TabbedItem } from 'devextreme-react/form';
+import { DataGrid, Lookup, Column, SimpleItem, Label } from 'devextreme-react/data-grid';
+import { ButtonItem, GroupItem, Tab, TabbedItem } from 'devextreme-react/form';
 import DataSource from 'devextreme/data/data_source';
 import CustomStore from 'devextreme/data/custom_store';
+import { Button, CheckBox } from 'devextreme-react';
+
+
+function ZatrideniItem({ text }: {text: string}) {
+    return (
+        <SimpleItem
+            dataField=''
+        >
+            <Label text={text} />
+        </SimpleItem>
+    );
+}
 
 
 function BottomTabs() {
@@ -173,7 +185,32 @@ function BottomTabs() {
 
                 <Tab
                     title='Zatřídění'
+                    colCount={4}
                 >
+
+                    <GroupItem>
+                        <ZatrideniItem text='Zakázka' />
+                        <ZatrideniItem text='Fáze' />
+                        <ZatrideniItem text='Oblast' />
+                        <ZatrideniItem text='Marketingová akce' />
+                        <ZatrideniItem text='Zdroj' />
+                    </GroupItem>
+
+                    <ButtonItem />
+
+                    <GroupItem>
+                        <CheckBox 
+                            text='Konsignace'
+                        />
+                    </GroupItem>
+
+                    <GroupItem>
+                        <ZatrideniItem text='Bankovní účet' />
+                        <ZatrideniItem text='Způsob úhrady' />
+                        <ZatrideniItem text='Způsob dodání' />
+                        <ZatrideniItem text='Dodací podmínky' />
+                        <ZatrideniItem text='Skladník' />
+                    </GroupItem>
 
                 </Tab>
 

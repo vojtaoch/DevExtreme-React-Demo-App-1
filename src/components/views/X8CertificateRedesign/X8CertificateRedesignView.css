@@ -1,0 +1,14 @@
+.dx-field-item-label-content {
+    padding-left: 0;
+}
+
+.dx-field-item-label-text,
+label {
+    font-size: 11px;
+    color: darkcyan;
+}
+
+.top-middle label {
+    position: relative;
+    left: 13px;
+}

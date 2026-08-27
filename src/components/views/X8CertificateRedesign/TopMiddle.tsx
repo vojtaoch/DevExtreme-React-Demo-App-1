@@ -16,8 +16,7 @@ function LeftColumnElement({text, readOnly} : ColumnElementProps) {
             dataField=''
             editorOptions={{
                 width: leftColumnInputFieldWidth,
-                readOnly: readOnly,
-                elementAttr: { style: 'margin-top: -7px;' }
+                readOnly: readOnly
             }}
         >
             <Label text={text} />
@@ -33,7 +32,7 @@ function RightColumnElement({text, readOnly = false} : ColumnElementProps) {
                 width: rightColumnInputFieldWidth,
                 readOnly: readOnly,
                 elementAttr: { 
-                    style: 'margin-top: -7px; margin-left: -80px;'
+                    style: 'margin-left: -80px;'
                 }
             }}
         >
@@ -54,6 +53,7 @@ function TopMiddle() {
     return (
         <GroupItem
             colCount={2}
+            cssClass='top-middle'
         >
 
             <GroupItem

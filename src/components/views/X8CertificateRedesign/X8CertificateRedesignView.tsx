@@ -3,6 +3,8 @@ import TopLeft from './TopLeft';
 import TopMiddle from './TopMiddle';
 import BottomTabs from './BottomTabs/BottomTabs';
 
+import './X8CertificateRedesignView.css';
+
 
 function X8CertificateRedesignView() {
     return (

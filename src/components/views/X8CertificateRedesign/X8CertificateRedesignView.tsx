@@ -9,6 +9,39 @@ import BottomTabs from './BottomTabs/BottomTabs';
 import './X8CertificateRedesignView.css';
 
 
+export interface InvoiceItem {
+    POZICE: number;
+    cisloZbozi?: string;
+    NAZEV_FAK_POL?: string;
+    MNOZSTVI?: number;
+    MJ?: string;
+    CENA_PRODEJ?: number;
+    DPH?: number;
+    PDP?: number;
+    TXTA_ID1?: string;
+    TXTA_ID2?: string;
+    OBJ_ID?: string;
+    OBLAST_IPOL?: string;
+    DOPRAVA_ID?: string;
+    CENA_SDPH?: number;
+    CENA_NAKUP?: number;
+}
+
+export interface Invoice {
+    FAK_ID: string;
+    FIRMA_ID?: string;
+    ZAKAZKA_ID?: string;
+    SMAN_ID?: string;
+    DAT_ZAPL?: string;
+    CELK_PRODEJ?: number;
+    CELK_DPH?: number;
+    CELK_ZAPL?: number;
+
+    FAK_POL?: InvoiceItem[];
+
+    // and so on
+}
+
 function X8CertificateRedesignView() {
     const { fakId } = useParams<{ fakId: string }>();
 
@@ -45,7 +78,7 @@ function X8CertificateRedesignView() {
             <TopLeft />
             <TopMiddle />
             <EmptyItem />
-            <BottomTabs fakId={fakId} />
+            <BottomTabs invoice={invoice} />
         </Form>
     );
 }

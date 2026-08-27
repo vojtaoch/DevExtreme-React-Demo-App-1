@@ -2,8 +2,11 @@ import { DataGrid, Lookup, Column } from 'devextreme-react/data-grid';
 import DataSource from 'devextreme/data/data_source';
 import CustomStore from 'devextreme/data/custom_store';
 
+import type { Invoice } from '../X8CertificateRedesignView';
 
-function Polozky({ fakId } : { fakId: string }) {
+
+function Polozky({ invoice }: { invoice: Invoice }) {
+    /*
     const polozkyDataSource = new DataSource({
         store: new CustomStore({
             key: 'POZICE',
@@ -27,10 +30,11 @@ function Polozky({ fakId } : { fakId: string }) {
         }),
         paginate: false
     });
+    */
 
     return (
         <DataGrid
-            dataSource={polozkyDataSource}
+            dataSource={invoice?.FAK_POL ?? []}
         >
 
             <Column

@@ -6,6 +6,8 @@ import PomocneTexty from './PomocneTexty';
 import DynamickeTexty from './DynamickeTexty';
 import Poznamka from './Poznamka';
 
+import type { Invoice } from '../X8CertificateRedesignView';
+
 
 function ZatrideniItem({ text }: {text: string}) {
     return (
@@ -17,7 +19,7 @@ function ZatrideniItem({ text }: {text: string}) {
     );
 }
 
-function BottomTabs({ fakId } : { fakId: string | undefined }) {
+function BottomTabs({ invoice } : { invoice: Invoice }) {
     return (
         <GroupItem
             colSpan={3}
@@ -26,7 +28,7 @@ function BottomTabs({ fakId } : { fakId: string | undefined }) {
 
                 <Tab
                     title='Položky'
-                    render={() => (<Polozky fakId={fakId} />)}
+                    render={() => (<Polozky invoice={invoice} />)}
                 />
 
                 <Tab

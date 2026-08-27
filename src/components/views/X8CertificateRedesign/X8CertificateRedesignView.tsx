@@ -1,7 +1,7 @@
 import Form, { EmptyItem } from 'devextreme-react/form';
 import TopLeft from './TopLeft';
 import TopMiddle from './TopMiddle';
-import BottomTabs from './BottomTabs';
+import BottomTabs from './BottomTabs/BottomTabs';
 
 
 function X8CertificateRedesignView() {

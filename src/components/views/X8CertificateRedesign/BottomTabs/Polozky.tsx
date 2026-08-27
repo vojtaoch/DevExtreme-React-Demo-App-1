@@ -3,18 +3,25 @@ import DataSource from 'devextreme/data/data_source';
 import CustomStore from 'devextreme/data/custom_store';
 
 
-function Polozky() {
+function Polozky({ fakId } : { fakId: string }) {
     const polozkyDataSource = new DataSource({
         store: new CustomStore({
             key: 'POZICE',
             load: async () => {
-                const response = await fetch("/api/odata/FAKTURA('FV06-0137')?$expand=FAK_POL");
-                
+                if (!fakId) {
+                    return [];
+                }
+
+                const response = await fetch(
+                    `/api/odata/FAKTURA('${encodeURIComponent(fakId)}')?$expand=FAK_POL`
+                );
+
                 if (!response.ok) {
                     throw new Error(`HTTP chyba ${response.status}`);
                 }
 
                 const data = await response.json();
+
                 return data.FAK_POL || [];
             }
         }),

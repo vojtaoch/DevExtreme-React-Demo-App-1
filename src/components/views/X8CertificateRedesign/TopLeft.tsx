@@ -102,7 +102,7 @@ function TopLeft() {
 
             <SimpleItem
                 colSpan={2}
-                dataField=''
+                dataField='FAK_ID'
                 cssClass='textbox-cislo-dokladu'
             >
                 <Label text='Číslo dokladu' />
@@ -131,7 +131,7 @@ function TopLeft() {
             </SimpleItem>
             <SimpleItem
                 colSpan={2}
-                dataField=''
+                dataField='UCET_FAK'  // wrong data field, change later
                 cssClass='textbox-evid-cislo-and-var-symbol'
             >
                 <Label 
@@ -141,7 +141,7 @@ function TopLeft() {
 
             <SimpleItem
                 colSpan={4}
-                dataField=''
+                dataField='FIRMA_ID'  // wrong data field, change later
                 cssClass='textbox-without-label'
             />
 

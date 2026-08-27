@@ -202,6 +202,10 @@ function App() {
                             path='components/views/X8CertificateRedesign/X8CertificateRedesignView'
                             element={<X8CertificateRedesign />}
                         />
+                        <Route
+                            path='x8-certificate/:fakId'
+                            element={<X8CertificateRedesign />}
+                        />
                     </Routes>
                 </div>
             </Drawer>

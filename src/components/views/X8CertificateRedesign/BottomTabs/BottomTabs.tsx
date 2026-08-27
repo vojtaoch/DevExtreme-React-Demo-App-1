@@ -17,7 +17,7 @@ function ZatrideniItem({ text }: {text: string}) {
     );
 }
 
-function BottomTabs() {
+function BottomTabs({ fakId } : { fakId: string | undefined }) {
     return (
         <GroupItem
             colSpan={3}
@@ -26,7 +26,7 @@ function BottomTabs() {
 
                 <Tab
                     title='Položky'
-                    render={() => (<Polozky />)}
+                    render={() => (<Polozky fakId={fakId} />)}
                 />
 
                 <Tab

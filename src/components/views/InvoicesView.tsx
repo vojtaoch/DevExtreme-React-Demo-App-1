@@ -25,6 +25,8 @@ import DataSource from 'devextreme/data/data_source';
 import { CustomStore, ODataStore, type DataSourceOptions } from 'devextreme/common/data';
 import { useMemo } from 'react';
 
+import { useNavigate } from 'react-router-dom';
+
 
 function InvoicesView() {
     const dataSource = new DataSource({
@@ -52,6 +54,8 @@ function InvoicesView() {
         paginate: false
     }), []);
 
+    const navigate = useNavigate();
+
     return (
         <div className="App">
 
@@ -61,7 +65,13 @@ function InvoicesView() {
                 onExporting={exportGrid}
                 onRowInserted={(e: DataGridTypes.RowInsertedEvent) => {
                     notify("Záznam byl úspěšně vytvořen!", "success", 5000);
-                }}>
+                }}
+                onCellDblClick={(e) => {
+                    if (e.column?.dataField === 'FAK_ID') {
+                        navigate(`/x8-certificate/${e.data.FAK_ID}`);
+                    }
+                }}
+                >
 
                   <Sorting mode="multiple" />
                   <FilterRow visible={true} />

@@ -107,23 +107,16 @@ function TopLeft() {
             >
                 <Label text='Číslo dokladu' />
             </SimpleItem>
-            <GroupItem
-                colCount={2}
+            <SimpleItem
+                render={() => (
+                    <div className="textbox-button-container">
+                        <TextBox className="small-input-field" />
+                        <Button className="button-rada" />
+                    </div>
+                )}
             >
-                <SimpleItem
-                    dataField=''
-                    cssClass='small-input-field'
-                >
-                    <Label text='Řada' />
-                </SimpleItem>
-                <SimpleItem
-                    render={() => (
-                        <Button className='button-rada' />
-                    )}
-                >
-                    <Label text=' ' />
-                </SimpleItem>
-            </GroupItem>
+                <Label text="Řada" />
+            </SimpleItem>
             <EmptyItem />
 
             <SimpleItem

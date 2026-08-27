@@ -2,6 +2,8 @@ import { SimpleItem, GroupItem, EmptyItem, Label } from 'devextreme-react/form';
 import { Button } from 'devextreme-react/button';
 import { TextBox } from 'devextreme-react/text-box';
 
+import './TopLeft.css';
+
 
 type CompanyInfo = {
     address: string;
@@ -13,72 +15,65 @@ type CompanyInfo = {
 
 type CompanySectionProps = {
     companyInfo: CompanyInfo;
-    employeeInfo: string;
     isRecipient: boolean
 };
 
-const customerAndRecipientInfoStyle = {
-    marginTop: '4px',
-    fontSize: '13px',
-    color: '#666',
-    display: 'flex',
-    justifyContent: 'space-between'
-}
-
-function CompanySection({ companyInfo, employeeInfo, isRecipient }: CompanySectionProps) {
+function CompanySection({ companyInfo, isRecipient }: CompanySectionProps) {
     const labelText = isRecipient ? 'Příjemce' : 'Odběratel';
 
     return (
-        <>
-            <SimpleItem colSpan={4}
-                render={() => (
-                    <div>
-                        <label>
-                            {labelText}
-                        </label>
+        <SimpleItem colSpan={4}
+            render={() => (
+                <div>
+                    <label>
+                        {labelText}
+                    </label>
 
-                        <TextBox />
+                    <TextBox />
 
-                        {companyInfo && (
-                            <>
-                                <div style={customerAndRecipientInfoStyle}>
-                                    <div>{companyInfo.address}</div>
-                                    <div>{companyInfo.countryCode}</div>
-                                </div>
-                                <div style={customerAndRecipientInfoStyle}>
-                                    <span>{companyInfo.ico}</span>
-                                    <span style={{ width: '60%', textAlign: 'left' }}>
-                                        {companyInfo.dic}
-                                    </span>
-                                    <span>{companyInfo.line2End}</span>
-                                </div>
-                            </>
-                        )}
-                    </div>
-                )}
-            />
-
-            <SimpleItem
-                colSpan={4}
-                render={() => (
-                    <div>
-                        <TextBox />
-
-                        {employeeInfo && (
-                            <div style={customerAndRecipientInfoStyle}>
-                                <div>{employeeInfo}</div>
+                    {companyInfo && (
+                        <>
+                            <div className='customer-and-recipient-info'>
+                                <div>{companyInfo.address}</div>
+                                <div>{companyInfo.countryCode}</div>
                             </div>
-                        )}
-                    </div>
-                )}
-            />
-        </>
+                            <div className='customer-and-recipient-info'>
+                                <span>{companyInfo.ico}</span>
+                                <span className='dic'>
+                                    {companyInfo.dic}
+                                </span>
+                                <span>{companyInfo.line2End}</span>
+                            </div>
+                        </>
+                    )}
+                </div>
+            )}
+        />
+    );
+}
+
+function EmployeeSection({employeeInfo} : {employeeInfo: string}) {
+    return (
+        <SimpleItem
+            colSpan={4}
+            render={() => (
+                <div>
+                    <TextBox
+                        className='textbox-without-label'
+                    />
+
+                    {employeeInfo && (
+                        <div className='customer-and-recipient-info'>
+                            <div>{employeeInfo}</div>
+                        </div>
+                    )}
+                </div>
+            )}
+        />
     );
 }
 
 function TopLeft() {
-    const smallInputFieldWidth = '75px';
-
     const customerCompanyInfo = {
         address: 'adresa...',
         countryCode: 'CZ',
@@ -100,83 +95,79 @@ function TopLeft() {
     const recipientEmployeeInfo = 'Jméno';
 
     return (
-        <>
-            <GroupItem
-                colCount={4}
+        <GroupItem
+            colCount={4}
+            cssClass='top-left'
+        >
+
+            <SimpleItem
+                colSpan={2}
+                dataField=''
+                cssClass='textbox-cislo-dokladu'
             >
-
+                <Label text='Číslo dokladu' />
+            </SimpleItem>
+            <GroupItem
+                colCount={2}
+            >
                 <SimpleItem
-                    colSpan={2}
                     dataField=''
+                    cssClass='small-input-field'
                 >
-                    <Label text='Číslo dokladu' />
+                    <Label text='Řada' />
                 </SimpleItem>
-                <GroupItem
-                    colCount={2}
-                >
-                    <SimpleItem
-                        dataField=''
-                        editorOptions={{width: smallInputFieldWidth}}
-                    >
-                        <Label text='Řada' />
-                    </SimpleItem>
-                    <SimpleItem
-                        render={() => (
-                        <Button
-                            elementAttr={{ style: 'margin-top: 20px;' }}
-                        />
+                <SimpleItem
+                    render={() => (
+                        <Button className='button-rada' />
                     )}
-                    >
-                        <Label text=' ' />
-                    </SimpleItem>
-                </GroupItem>
-                <EmptyItem />
-
-                <SimpleItem
-                    colSpan={2}
-                    dataField=''
-                    editorOptions={{
-                        elementAttr: { style: 'margin-top: -20px;' },
-                        disabled: true
-                    }}
                 >
-                    <Label 
-                        render={() => (
-                            <span style={{ position: 'relative', top: '-15px' }}>
-                                Evidenční číslo
-                            </span>
-                        )}
-                    />
+                    <Label text=' ' />
                 </SimpleItem>
-                <SimpleItem
-                    colSpan={2}
-                    dataField=''
-                    editorOptions={{
-                        elementAttr: { style: 'margin-top: -20px;' }
-                    }}
-                >
-                    <Label 
-                        render={() => (
-                            <span style={{ position: 'relative', top: '-15px' }}>
-                                Variabilní symbol
-                            </span>
-                        )}
-                    />
-                </SimpleItem>
-
-                <SimpleItem
-                    colSpan={4}
-                    dataField=''
-                    editorOptions={{
-                        elementAttr: { style: 'margin-top: -20px;' }
-                    }}
-                />
-
-                <CompanySection companyInfo={customerCompanyInfo} employeeInfo={customerEmployeeInfo} isRecipient={false} />
-                <CompanySection companyInfo={recipientCompanyInfo} employeeInfo={recipientEmployeeInfo} isRecipient={true} />
-
             </GroupItem>
-        </>
+            <EmptyItem />
+
+            <SimpleItem
+                colSpan={2}
+                dataField=''
+                cssClass='textbox-evid-cislo-and-var-symbol'
+                editorOptions={{ disabled: true }}
+            >
+                <Label 
+                    text='Evidenční číslo'
+                />
+            </SimpleItem>
+            <SimpleItem
+                colSpan={2}
+                dataField=''
+                cssClass='textbox-evid-cislo-and-var-symbol'
+            >
+                <Label 
+                    text='Variabilní symbol'
+                />
+            </SimpleItem>
+
+            <SimpleItem
+                colSpan={4}
+                dataField=''
+                cssClass='textbox-without-label'
+            />
+
+            <CompanySection
+                companyInfo={customerCompanyInfo}
+                isRecipient={false}
+            />
+            <EmployeeSection
+                employeeInfo={customerEmployeeInfo}
+            />
+            <CompanySection
+                companyInfo={recipientCompanyInfo}
+                isRecipient={true}
+            />
+            <EmployeeSection
+                employeeInfo={recipientEmployeeInfo}
+            />
+
+        </GroupItem>
     );
 }
 

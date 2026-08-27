@@ -1,0 +1,49 @@
+.customer-and-recipient-info {
+    margin-top: 4px;
+    font-size: 16px;
+    color: #666;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 12px;
+}
+
+.dic {
+    width: 60%;
+    text-align: left;
+}
+
+.small-input-field {
+    width: 85px;
+}
+
+.textbox-evid-cislo-and-var-symbol {
+    margin-top: -12px;
+}
+
+.textbox-without-label {
+    margin-top: -18px;
+}
+
+.textbox-cislo-dokladu .dx-texteditor-input {
+    background-color: darkcyan;
+}
+
+.top-left .dx-field-item-label-content {
+    padding-left: 0 !important;
+}
+
+.top-left label {
+    display: inline-block;
+    padding-left: 13px;
+    font-size: 11px;
+    color: darkcyan;
+}
+
+.top-left .dx-field-item-label-text {
+    font-size: 11px;
+    color: darkcyan;
+}
+
+.button-rada {
+    margin-bottom: -15px;
+}
